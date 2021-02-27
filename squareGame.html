@@ -5,12 +5,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="squareGame.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <title>Square Game</title>
 </head>
 <body>
+    <button>Restart</button>
+
     <style>
         canvas {
       border:1vw solid #000;
+    }
+
+    button {
+        display: none;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        padding: 5vw;
+        box-shadow: -1px 2px 20px 5px grey;
+        border: hidden;
+        border-radius: 2.5vw;
+        font-size: 2vw;
+        background-color: #348fff;
+        cursor:pointer;
+        outline:none;
+    }
+
+    button:active {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        padding: 4vw;
+        box-shadow: 0px 0px 20px 1.5px grey;
+        border: hidden;
+        border-radius: 2.5vw;
+        font-size: 2vw;
+        background-color: #348fff;
+        cursor: pointer;
+        outline: none;
     }
     </style>
 </body>

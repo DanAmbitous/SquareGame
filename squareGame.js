@@ -33,18 +33,19 @@ class Components { //Properites of all of the objects on screen
 
     collisionWith(otherobj) {
         var myleft = this.x;
-    var myright = this.x + (this.width);
-    var mytop = this.y;
-    var mybottom = this.y + (this.height);
-    var otherleft = otherobj.x;
-    var otherright = otherobj.x + (otherobj.width);
-    var othertop = otherobj.y;
-    var otherbottom = otherobj.y + (otherobj.height);
-    var collision = true;
-    if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
-      collision = false;
-    }
-    return collision;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var collision = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) ||      (myright  < otherleft) || (myleft > otherright)) { 
+            collision = false;
+        }
+
+        return collision;
     }
 }
 
@@ -55,7 +56,7 @@ class Components { //Properites of all of the objects on screen
     }
 
     start() {
-        this.canvas.width = 480;
+        this.canvas.width =  80;
         this.canvas.height = 270;
 
         this.context = this.canvas.getContext("2d");
@@ -65,8 +66,16 @@ class Components { //Properites of all of the objects on screen
 
 let user; 
 let obstacles = [];
-let canvasWidth = Math.floor(Math.random() * window.innerWidth) + 300;
-let canvasHeight = Math.floor(Math.random() * window.innerHeight);
+let canvasWidth = Math.floor(Math.random() * window.innerWidth) + 5000;
+let canvasHeight = Math.floor(Math.random() * window.innerHeight) + 250;
+
+if (canvasWidth > window.innerWidth) {
+    canvasWidth = window.innerWidth;
+}
+
+if (canvasHeight > window.innerHeight) {
+    canvasHeight = window.innerHeight - 100;
+}
 
 document.addEventListener('keydown', moveUser);
 
@@ -98,15 +107,16 @@ function start() {
 
     user = new Components(10, 10, 25, 25, "blue", 10, canvas);
     user.create();
-
+    
     let counter = 0;
+    //let hp = 3;
     
     let interval = setInterval(() => {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight); 
 
         if ((user.x + user.width) >= canvas.width) {
             clearInterval(interval);
-            alert("won!");
+            alert("You have reached the finish line!");
         }
 
         for (let i = 0; i < obstacles.length; i++) {
@@ -114,13 +124,27 @@ function start() {
             
             if (user.collisionWith(element)) {
                 clearInterval(interval);
+
+                document.querySelector("button").style.display = "block";
+
+                document.querySelector("button").addEventListener("click", () => {
+                    location.reload();
+                })
+
+                //hp--;
+
+                /*user.fadeOut().fadeIn();
+
+                if (hp < 0) {
+                    clearInterval(interval);
+                }*/
             }       
         
             element.create();
             element.moveLeft();
         }
 
-        if (counter % 30 === 0) { //50, 100, ...
+        if (counter % 30 === 0) { //30, 60, ... to spawn obstacles
             let obstacle = new Components(canvasWidth, Math.floor(Math.random() * canvasHeight), Math.floor(Math.random() * 100) + 10  
             , Math.floor(Math.random() * 100) + 10, "red", 5, canvas);
 
@@ -134,6 +158,7 @@ function start() {
 }
 
 start();
+
 /* 
 setInterval - clears context then adds a different position
 */
@@ -148,4 +173,3 @@ setInterval - clears context then adds a different position
   ctx.strokeRect(0, 0, 500, 500);
 }, 30)
 */
-
