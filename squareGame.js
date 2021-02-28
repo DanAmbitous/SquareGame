@@ -66,16 +66,17 @@ class Components { //Properites of all of the objects on screen
 
 let user; 
 let obstacles = [];
-let canvasWidth = Math.floor(Math.random() * window.innerWidth) + 5000;
+
+let viewportWidth = document.querySelector("#main-div").clientWidth - 50;
+
+let canvasWidth = (viewportWidth < 300) ? viewportWidth : Math.floor(Math.random() * viewportWidth) + 300;
+
+/*let canvasWidth = Math.floor(Math.random() * viewportWidth) + (viewportWidth < 500 ? viewportWidth : 500);
+console.log(canvasWidth, viewportWidth);*/
+
+/*Math.floor(Math.random() * window.innerWidth) + 5000;*/
+
 let canvasHeight = Math.floor(Math.random() * window.innerHeight) + 250;
-
-if (canvasWidth > window.innerWidth) {
-    canvasWidth = window.innerWidth;
-}
-
-if (canvasHeight > window.innerHeight) {
-    canvasHeight = window.innerHeight - 100;
-}
 
 document.addEventListener('keydown', moveUser);
 
@@ -114,8 +115,8 @@ function start() {
     let ctx = canvas.getContext("2d");
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-
-    document.querySelector("body").append(canvas);
+    
+    document.querySelector("#main-div").append(canvas);
 
     user = new Components(10, 10, 25, 25, "blue", 15, canvas);
     user.create();
@@ -149,6 +150,8 @@ function start() {
                     location.reload();
                 }
             })
+        
+            clearInterval(intervalPoints);
         }
 
         for (let i = 0; i < obstacles.length; i++) {
@@ -156,6 +159,7 @@ function start() {
             
             if (user.collisionWith(element)) {
                 clearInterval(interval);
+                clearInterval(intervalPoints);                
 
                 document.querySelector("#restart").style.display = "block";
 
@@ -184,29 +188,32 @@ function start() {
             element.moveLeft();
         }
 
-        if (counter % 30 === 0) { //30, 60, ... to spawn obstacles
+        if (counter % 25 === 0) { //30, 60, ... to spawn obstacles
             let obstacle = new Components(canvasWidth, Math.floor(Math.random() * canvasHeight), Math.floor(Math.random() * 100) + 10  
             , Math.floor(Math.random() * 100) + 10, "red", 5, canvas);
 
             obstacles.push(obstacle);
+        }
 
-            setTimeout(() => {
+        if (counter % 200 === 0 && counter >= 200) { //30, 60, ... to spawn obstacles
                 let obstacle2 = new Components(canvasWidth, Math.floor(Math.random() * canvasHeight), Math.floor(Math.random() * 100) + 10  
                 , Math.floor(Math.random() * 100) + 10, "yellow", 10, canvas);
-
-                obstacles.push(obstacle2);
-            }, 10000)   
+    
+                obstacles.push(obstacle2);         
         }
 
         user.create();
 
         counter++; 
-    }, 30);
+    }, 50);
 }
 
 console.log(document.querySelector("body"));
 
-start();
+console.log(document.querySelector("#main-div").clientWidth);
+console.log(document.querySelector("#main-div").clientHeight);
+
+start(); 
 
 /* 
 setInterval - clears context then adds a different position
