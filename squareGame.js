@@ -95,6 +95,18 @@ function moveUser(event) {
     if (event.key === "ArrowUp" || event.key === "w") {
         user.moveUp();
     }
+
+    if (user.x < 0) {
+        user.x += 15;
+    }
+
+    if (user.y < 0) {
+        user.y += 15;
+    }
+
+    if (user.y > canvasHeight - 25) {
+        user.y = canvasHeight - 40;
+    }
 }
 
 function start() {
@@ -105,18 +117,38 @@ function start() {
 
     document.querySelector("body").append(canvas);
 
-    user = new Components(10, 10, 25, 25, "blue", 10, canvas);
+    user = new Components(10, 10, 25, 25, "blue", 15, canvas);
     user.create();
     
     let counter = 0;
+    let points = 0;
     //let hp = 3;
+
+    let intervalPoints = setInterval(() => {
+        points++;
+
+        document.querySelector("#points").innerHTML = points;
+    }, 1000)
+
     
     let interval = setInterval(() => {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight); 
 
         if ((user.x + user.width) >= canvas.width) {
             clearInterval(interval);
-            alert("You have reached the finish line!");
+            document.querySelector("#restart").style.display = "block";
+
+            document.querySelector("#restart").innerHTML = `Great you won! Total Points ${points} <br> <small>Press enter</small>`;
+
+            document.querySelector("#restart").addEventListener("click", () => {
+                location.reload();
+            })
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    location.reload();
+                }
+            })
         }
 
         for (let i = 0; i < obstacles.length; i++) {
@@ -125,10 +157,18 @@ function start() {
             if (user.collisionWith(element)) {
                 clearInterval(interval);
 
-                document.querySelector("button").style.display = "block";
+                document.querySelector("#restart").style.display = "block";
 
-                document.querySelector("button").addEventListener("click", () => {
+                document.querySelector("#restart").innerHTML = `Restart Total points ${points} <br> <small>press enter</small>`
+
+                document.querySelector("#restart").addEventListener("click", () => {
                     location.reload();
+                })
+
+                document.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        location.reload();
+                    }
                 })
 
                 //hp--;
@@ -149,6 +189,13 @@ function start() {
             , Math.floor(Math.random() * 100) + 10, "red", 5, canvas);
 
             obstacles.push(obstacle);
+
+            setTimeout(() => {
+                let obstacle2 = new Components(canvasWidth, Math.floor(Math.random() * canvasHeight), Math.floor(Math.random() * 100) + 10  
+                , Math.floor(Math.random() * 100) + 10, "yellow", 10, canvas);
+
+                obstacles.push(obstacle2);
+            }, 10000)   
         }
 
         user.create();
@@ -156,6 +203,8 @@ function start() {
         counter++; 
     }, 30);
 }
+
+console.log(document.querySelector("body"));
 
 start();
 
